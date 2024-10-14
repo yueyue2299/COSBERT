@@ -3,16 +3,16 @@ import torch
 import torch.nn.functional as F
 
 class COSBERT(nn.Module):
-    def __init__(self, Embedding_ChemBERT=384, nodes=128):
+    def __init__(self, Embedding_ChemBERT=384):
         super(COSBERT, self).__init__()
 
         # self.Embedding_ChemBERT = Embedding_ChemBERT # Pre-trained embeddings (E_i) from ChemBERTa-2
 
         # Component Embedding Network f_theta Input: E_i Output: V_COSMO, sigma profile
         self.layers = nn.Sequential(
-            nn.Linear(Embedding_ChemBERT, nodes),
+            nn.Linear(Embedding_ChemBERT, 128),
             nn.ReLU(),
-            nn.Linear(nodes, 64),
+            nn.Linear(128, 64),
             nn.ReLU(),
             nn.Linear(64, 52)
         )
