@@ -17,8 +17,32 @@ from sklearn.model_selection import train_test_split
 import warnings
 from transformers import logging
 
-def load_and_split_data(csv_file, valid_ratio, test_ratio, seed):
-    data = pd.read_csv(csv_file)
+def data_normalize(csv_file):
+    df = pd.read_csv(csv_file)
+
+    Vcosmo_mean = df['Vcosmo'].mean()
+    Vcosmo_normalized = df['Vcosmo'] / Vcosmo_mean
+    
+    density = ['-2.5', '-2.4', '-2.3', '-2.2', '-2.1', '-2.0', '-1.9', '-1.8', '-1.7', '-1.6',
+                        '-1.5', '-1.4', '-1.3', '-1.2', '-1.1', '-1.0', '-0.9', '-0.8', '-0.7', '-0.6',
+                        '-0.5', '-0.4', '-0.3', '-0.2', '-0.1', '0.0', '0.1', '0.2', '0.3', '0.4', '0.5',
+                        '0.6', '0.7', '0.8', '0.9', '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7',
+                        '1.8', '1.9', '2.0', '2.1', '2.2', '2.3', '2.4', '2.5']
+
+    overall_sigma_mean = df[density].stack().mean()
+    normal_sigma = df[density] / overall_sigma_mean
+    
+    data_normalized = pd.DataFrame({'id': df['id'], 'smiles': df['smiles'], 'Vcosmo': Vcosmo_normalized})
+    data_normalized = pd.concat([data_normalized, normal_sigma], axis=1)
+    
+    with open('Vcosmo_sigma_mean.txt', 'w') as f:
+        f.writelines(Vcosmo_mean)
+        f.writelines(overall_sigma_mean)
+    
+    return data_normalized
+
+def load_and_split_data(csv_file, valid_ratio, test_ratio, seed, normalization=True):
+    data = data_normalize(csv_file) if normalization else pd.read_csv(csv_file)
 
     train_valid_data, test_data = train_test_split(data, test_size=test_ratio, random_state=seed)
 
@@ -56,3 +80,24 @@ def preprocess_and_save_npz_from_csv(csv_path, seed, valid_ratio, test_ratio, st
     preprocess_and_save(train_data, f'{storage_path}//train_data.npz')
     preprocess_and_save(valid_data, f'{storage_path}//valid_data.npz')
     preprocess_and_save(test_data, f'{storage_path}//test_data.npz')
+    
+if __name__ == '__main__':
+    df = pd.read_csv('VT2005_data_for_training.csv')
+
+    Vcosmo_mean = df['Vcosmo'].mean()
+    Vcosmo_normalized = df['Vcosmo'] / Vcosmo_mean
+    
+    density = ['-2.5', '-2.4', '-2.3', '-2.2', '-2.1', '-2.0', '-1.9', '-1.8', '-1.7', '-1.6',
+                        '-1.5', '-1.4', '-1.3', '-1.2', '-1.1', '-1.0', '-0.9', '-0.8', '-0.7', '-0.6',
+                        '-0.5', '-0.4', '-0.3', '-0.2', '-0.1', '0.0', '0.1', '0.2', '0.3', '0.4', '0.5',
+                        '0.6', '0.7', '0.8', '0.9', '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7',
+                        '1.8', '1.9', '2.0', '2.1', '2.2', '2.3', '2.4', '2.5']
+
+    overall_mean = df[density].stack().mean()
+    
+    normal_sigma = df[density] / overall_mean
+    
+    data_normalized = pd.DataFrame({'id': df['id'], 'smiles': df['smiles'], 'Vcosmo': Vcosmo_normalized})
+    data_normalized = pd.concat([data_normalized, normal_sigma], axis=1)
+    
+    print(data_normalized['Vcosmo'].mean())
