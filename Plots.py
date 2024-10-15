@@ -19,3 +19,19 @@ def plot_sigma_profile(sigma_profile, prediction, smiles, id=None):
     plt.legend()
 
     plt.show()
+    
+def plot_V_cosmo(smiles, real, prediction):
+    plt.figure(figsize=(4, 6))
+    
+    if not real:
+        real = 0
+        
+    labels = ['Real', 'Prediction']
+    V_cosmo = [real, prediction]
+
+    plt.bar(labels, V_cosmo, color=['dodgerblue', 'red'], width=0.8)
+
+    plt.ylabel(r'$V_{COSMO}(\AA^3)$')
+    plt.title(smiles)
+
+    plt.show()
