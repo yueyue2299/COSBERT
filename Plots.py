@@ -21,7 +21,7 @@ def plot_sigma_profile(sigma_profile, prediction, smiles, id=None):
     plt.show()
     
 def plot_V_cosmo(smiles, real, prediction):
-    plt.figure(figsize=(4, 6))
+    plt.figure(figsize=(4, 4))
     
     if not real:
         real = 0
