@@ -29,9 +29,13 @@ def plot_V_cosmo(smiles, real, prediction):
     labels = ['Real', 'Prediction']
     V_cosmo = [real, prediction]
 
-    plt.bar(labels, V_cosmo, color=['dodgerblue', 'red'], width=0.8)
+    bars = plt.bar(labels, V_cosmo, color=['dodgerblue', 'red'], width=0.8)
 
     plt.ylabel(r'$V_{COSMO}(\AA^3)$')
     plt.title(smiles)
 
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval, round(yval, 2), ha='center', va='bottom')
+    
     plt.show()
