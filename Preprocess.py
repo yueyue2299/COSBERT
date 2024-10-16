@@ -49,9 +49,8 @@ def load_and_split_data(csv_file, valid_ratio, test_ratio, seed, normalization=T
     train_data, valid_data = train_test_split(train_valid_data, test_size=valid_ratio / (1 - test_ratio), random_state=seed)
     # train_data, valid_data = train_test_split(train_valid_data, test_size=valid_ratio, random_state=seed)
 
-    for file, data in zip(['train.txt', 'valid.txt', 'test.txt'], (train_data, valid_data, test_data)):
-        with open(file, 'w') as f:
-            f.write(data)
+    for file, data in zip(['train.csv', 'valid.csv', 'test.csv'], (train_data, valid_data, test_data)):
+        data.to_csv(file, index=False)
     
     return train_data, valid_data, test_data # [id, SMILES, Vcosmo, sigma profile], length = 54
 
