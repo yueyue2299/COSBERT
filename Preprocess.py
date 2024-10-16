@@ -70,12 +70,12 @@ def preprocess_and_save(data, save_path):
     np.savez_compressed(save_path, embeddings=embeddings, labels=labels)
     
 
-def preprocess_and_save_npz_from_csv(csv_path, seed, valid_ratio, test_ratio, storage_path='.'):
+def preprocess_and_save_npz_from_csv(csv_path, seed, valid_ratio, test_ratio, storage_path='.', normalization=True):
     # Suppress transformers warnings
     warnings.filterwarnings('ignore')
     logging.set_verbosity_error()
     
-    train_data, valid_data, test_data = load_and_split_data(csv_path, valid_ratio, test_ratio, seed)
+    train_data, valid_data, test_data = load_and_split_data(csv_path, valid_ratio, test_ratio, seed, normalization)
 
     # Preprocess and save train, validation, and test data
     train_data = pd.DataFrame(train_data)  # Assuming train_data is your pandas DataFrame
