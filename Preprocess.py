@@ -36,8 +36,8 @@ def data_normalize(csv_file):
     data_normalized = pd.concat([data_normalized, normal_sigma], axis=1)
     
     with open('Vcosmo_sigma_mean.txt', 'w') as f:
-        f.writelines(Vcosmo_mean)
-        f.writelines(overall_sigma_mean)
+        f.write(f"{Vcosmo_mean}\n")
+        f.write(f"{overall_sigma_mean}\n")
     
     return data_normalized
 
