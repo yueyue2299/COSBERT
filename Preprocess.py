@@ -35,7 +35,7 @@ def data_normalize(csv_file):
     data_normalized = pd.DataFrame({'id': df['id'], 'smiles': df['smiles'], 'Vcosmo': Vcosmo_normalized})
     data_normalized = pd.concat([data_normalized, normal_sigma], axis=1)
     
-    with open('Vcosmo_sigma_mean.txt', 'w') as f:
+    with open('./Vcosmo_sigma_mean.txt', 'w') as f:
         f.write(f"{Vcosmo_mean}\n")
         f.write(f"{overall_sigma_mean}\n")
     
@@ -88,21 +88,6 @@ def preprocess_and_save_npz_from_csv(csv_path, seed, valid_ratio, test_ratio, st
     
 if __name__ == '__main__':
     df = pd.read_csv('VT2005_data_for_training.csv')
-
-    Vcosmo_mean = df['Vcosmo'].mean()
-    Vcosmo_normalized = df['Vcosmo'] / Vcosmo_mean
     
-    density = ['-2.5', '-2.4', '-2.3', '-2.2', '-2.1', '-2.0', '-1.9', '-1.8', '-1.7', '-1.6',
-                        '-1.5', '-1.4', '-1.3', '-1.2', '-1.1', '-1.0', '-0.9', '-0.8', '-0.7', '-0.6',
-                        '-0.5', '-0.4', '-0.3', '-0.2', '-0.1', '0.0', '0.1', '0.2', '0.3', '0.4', '0.5',
-                        '0.6', '0.7', '0.8', '0.9', '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7',
-                        '1.8', '1.9', '2.0', '2.1', '2.2', '2.3', '2.4', '2.5']
-
-    overall_mean = df[density].stack().mean()
-    
-    normal_sigma = df[density] / overall_mean
-    
-    data_normalized = pd.DataFrame({'id': df['id'], 'smiles': df['smiles'], 'Vcosmo': Vcosmo_normalized})
-    data_normalized = pd.concat([data_normalized, normal_sigma], axis=1)
-    
-    print(data_normalized['Vcosmo'].mean())
+    data = data_normalize('VT2005_data_for_training.csv')
+    print(data)
