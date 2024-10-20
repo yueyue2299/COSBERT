@@ -40,9 +40,9 @@ def data_normalize(csv_file):
 def load_and_split_data(csv_file, valid_ratio, test_ratio, seed, normalization=True):
     if normalization:
         Vcosmo_mean, overall_sigma_mean, data = data_normalize(csv_file)  
-    # else:
-    #     Vcosmo_mean, overall_sigma_mean = None, None
-    #     data = pd.read_csv(csv_file)
+    else:
+        Vcosmo_mean, overall_sigma_mean = None, None
+        data = pd.read_csv(csv_file)
 
     train_valid_data, test_data = train_test_split(data, test_size=test_ratio, random_state=seed)
 
@@ -88,7 +88,10 @@ def preprocess_and_save_npz_from_csv(csv_path, seed, valid_ratio, test_ratio, st
     return Vcosmo_mean, overall_sigma_mean
     
 if __name__ == '__main__':
-    df = pd.read_csv('VT2005_data_for_training.csv')
     
-    Vcosmo_mean, overall_sigma_mean, data = data_normalize('VT2005_data_for_training.csv')
-    print(Vcosmo_mean, overall_sigma_mean)
+
+    # train_data, valid_data, test_data, Vcosmo_mean, overall_sigma_mean = load_and_split_data('VT2005_data_for_training.csv', 0.1, 0.1, 123456, normalization=False)
+    preprocess_and_save_npz_from_csv('VT2005_data_for_training.csv', 123456, 0.1, 0.1, normalization=True)
+    # print(train_data)
+
+    
