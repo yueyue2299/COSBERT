@@ -35,11 +35,6 @@ def data_normalize(csv_file):
     data_normalized = pd.DataFrame({'id': df['id'], 'smiles': df['smiles'], 'Vcosmo': Vcosmo_normalized})
     data_normalized = pd.concat([data_normalized, normal_sigma], axis=1)
     
-    # with open('./Vcosmo_sigma_mean.txt', 'w') as f:
-    #     f.write('test\n')
-        # f.write(f"{Vcosmo_mean}\n")
-        # f.write(f"{overall_sigma_mean}\n")
-    
     return Vcosmo_mean, overall_sigma_mean, data_normalized
 
 def load_and_split_data(csv_file, valid_ratio, test_ratio, seed, normalization=True):
