@@ -35,15 +35,19 @@ def data_normalize(csv_file):
     data_normalized = pd.DataFrame({'id': df['id'], 'smiles': df['smiles'], 'Vcosmo': Vcosmo_normalized})
     data_normalized = pd.concat([data_normalized, normal_sigma], axis=1)
     
-    with open('./Vcosmo_sigma_mean.txt', 'w') as f:
-        f.write('test\n')
+    # with open('./Vcosmo_sigma_mean.txt', 'w') as f:
+    #     f.write('test\n')
         # f.write(f"{Vcosmo_mean}\n")
         # f.write(f"{overall_sigma_mean}\n")
     
-    return data_normalized
+    return Vcosmo_mean, overall_sigma_mean, data_normalized
 
 def load_and_split_data(csv_file, valid_ratio, test_ratio, seed, normalization=True):
-    data = data_normalize(csv_file) if normalization else pd.read_csv(csv_file)
+    if normalization:
+        Vcosmo_mean, overall_sigma_mean, data = data_normalize(csv_file)  
+    else:
+        Vcosmo_mean, overall_sigma_mean = None, None
+        data = pd.read_csv(csv_file)
 
     train_valid_data, test_data = train_test_split(data, test_size=test_ratio, random_state=seed)
 
@@ -53,7 +57,7 @@ def load_and_split_data(csv_file, valid_ratio, test_ratio, seed, normalization=T
     for file, data in zip(['train.csv', 'valid.csv', 'test.csv'], (train_data, valid_data, test_data)):
         data.to_csv(file, index=False)
     
-    return train_data, valid_data, test_data # [id, SMILES, Vcosmo, sigma profile], length = 54
+    return train_data, valid_data, test_data, Vcosmo_mean, overall_sigma_mean # [id, SMILES, Vcosmo, sigma profile], length = 54
 
 def preprocess_and_save(data, save_path):
     smiles_list = data.iloc[:, 1].tolist()
@@ -75,7 +79,7 @@ def preprocess_and_save_npz_from_csv(csv_path, seed, valid_ratio, test_ratio, st
     warnings.filterwarnings('ignore')
     logging.set_verbosity_error()
     
-    train_data, valid_data, test_data = load_and_split_data(csv_path, valid_ratio, test_ratio, seed, normalization)
+    train_data, valid_data, test_data, Vcosmo_mean, overall_sigma_mean = load_and_split_data(csv_path, valid_ratio, test_ratio, seed, normalization)
 
     # Preprocess and save train, validation, and test data
     train_data = pd.DataFrame(train_data)  # Assuming train_data is your pandas DataFrame
@@ -86,6 +90,7 @@ def preprocess_and_save_npz_from_csv(csv_path, seed, valid_ratio, test_ratio, st
     preprocess_and_save(valid_data, f'{storage_path}//valid_data.npz')
     preprocess_and_save(test_data, f'{storage_path}//test_data.npz')
     
+    return Vcosmo_mean, overall_sigma_mean
     
 if __name__ == '__main__':
     df = pd.read_csv('VT2005_data_for_training.csv')
