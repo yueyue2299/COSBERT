@@ -20,7 +20,7 @@ from transformers import logging
 def data_normalize(csv_file):
     df = pd.read_csv(csv_file)
 
-    Vcosmo_mean = df['Vcosmo'].mean()
+    Vcosmo_mean = float(df['Vcosmo'].mean())
     Vcosmo_normalized = df['Vcosmo'] / Vcosmo_mean
     
     density = ['-2.5', '-2.4', '-2.3', '-2.2', '-2.1', '-2.0', '-1.9', '-1.8', '-1.7', '-1.6',
@@ -29,15 +29,15 @@ def data_normalize(csv_file):
                 '0.6', '0.7', '0.8', '0.9', '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7',
                 '1.8', '1.9', '2.0', '2.1', '2.2', '2.3', '2.4', '2.5']
 
-    overall_sigma_mean = df[density].stack().mean()
+    overall_sigma_mean = float(df[density].stack().mean())
     normal_sigma = df[density] / overall_sigma_mean
     
     data_normalized = pd.DataFrame({'id': df['id'], 'smiles': df['smiles'], 'Vcosmo': Vcosmo_normalized})
     data_normalized = pd.concat([data_normalized, normal_sigma], axis=1)
     
     with open('Vcosmo_sigma_mean.txt', 'w') as f:
-        f.write(str(Vcosmo_mean) + '\n')
-        f.write(str(overall_sigma_mean) + '\n')
+        f.write(f"{Vcosmo_mean}\n")
+        f.write(f"{overall_sigma_mean}\n")
     
     return data_normalized
 
