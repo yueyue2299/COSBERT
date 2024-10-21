@@ -10,11 +10,11 @@ class COSBERT(nn.Module):
 
         # Component Embedding Network f_theta Input: E_i Output: V_COSMO, sigma profile
         self.layers = nn.Sequential(
-            nn.Linear(Embedding_ChemBERT, 128),
+            nn.Linear(Embedding_ChemBERT, 256),
             nn.ReLU(),
-            nn.Linear(128, 64),
+            nn.Linear(256, 128),
             nn.ReLU(),
-            nn.Linear(64, 52)
+            nn.Linear(128, 52)
         )
 
     def forward(self, E_i):
