@@ -14,7 +14,8 @@ class COSBERT(nn.Module):
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
-            nn.Linear(128, 52)
+            nn.Linear(128, 52),
+            nn.Softplus()
         )
 
     def forward(self, E_i):
