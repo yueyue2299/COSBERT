@@ -14,12 +14,9 @@ class COSBERT(nn.Module):
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
-            nn.Linear(128, 52),
+            nn.Linear(128, 53),
             nn.Softplus()
         )
 
     def forward(self, E_i):
-        
-        x = self.layers(E_i) # [B,52]
-
-        return x
+        return self.layers(E_i) # [B,53]
