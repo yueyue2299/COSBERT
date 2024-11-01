@@ -27,7 +27,9 @@ class COSBERT(nn.Module):
         
         # sigma profile output layer [51]
         self.sigma_output = nn.Sequential(
-            nn.Linear(hidden_dim_last, 51)
+            nn.Linear(hidden_dim_last, 64),
+            nn.ReLU(),
+            nn.Linear(64, 51)
             # nn.Sigmoid() # restrict the outputs between 0 and 1
         )
 
