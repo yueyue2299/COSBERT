@@ -33,9 +33,14 @@ class COSBERT(nn.Module):
 
     def forward(self, E_i):
         shared_out = self.shared_layers(E_i)
+        
         V_A_out = self.V_A_output(shared_out)
+        
         sigma_out = self.sigma_output(shared_out)
+        sigma_out = torch.relu(sigma_out) # prevent negative values
+        
         sigma_sum = torch.sum(sigma_out, dim=1, keepdim=True) + 1e-8 # prevent sum = 0
+        
         sigma_out = sigma_out / sigma_sum # normalization
         
         return torch.cat((V_A_out, sigma_out), dim=1) # [B,53]
