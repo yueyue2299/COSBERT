@@ -9,8 +9,8 @@ class COSBERT(nn.Module):
         # self.Embedding_ChemBERT = Embedding_ChemBERT # Pre-trained embeddings (E_i) from ChemBERTa-2
         
         # dimension of hidden layers
-        hidden_dim_1 = 256
-        hidden_dim_last = 128
+        hidden_dim_1 = 512
+        hidden_dim_last = 256
         
         # Component Embedding Network f_theta Input: E_i Output: V_COSMO, A_COSMO, sigma profile
         
