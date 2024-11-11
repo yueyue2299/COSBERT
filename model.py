@@ -22,7 +22,9 @@ class COSBERT(nn.Module):
         )
         # V_cosmo and A_cosmo output layer [2]
         self.V_A_output = nn.Sequential(
-            nn.Linear(hidden_dim_last, 2)
+            nn.Linear(hidden_dim_last, 16),
+            nn.ReLU(),
+            nn.Linear(16, 2)
         )
         
         # sigma profile output layer [51]
