@@ -16,8 +16,10 @@ class COSBERT(nn.Module):
         
         self.shared_layers = nn.Sequential(
             nn.Linear(Embedding_ChemBERT, hidden_dim_1),
+            nn.Dropout(p=0.3),
             nn.ReLU(),
             nn.Linear(hidden_dim_1, hidden_dim_last),
+            nn.Dropout(p=0.2),
             nn.ReLU()
         )
         # V_cosmo and A_cosmo output layer [2]
