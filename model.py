@@ -38,7 +38,7 @@ class COSBERT(nn.Module):
             nn.Linear(hidden_dim_2, 128),
             nn.BatchNorm1d(128),
             nn.ReLU(),
-            nn.Linear(128, 51),
+            nn.Linear(128, 64),
             nn.ReLU(),
             nn.Linear(64, 51),
             # nn.Sigmoid() # restrict the outputs between 0 and 1
