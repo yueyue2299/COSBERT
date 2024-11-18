@@ -3,7 +3,7 @@ import torch
 import torch.nn.functional as F
 
 class COSBERT(nn.Module):
-    def __init__(self, mean_VA, std_VA, Embedding_ChemBERT=384):
+    def __init__(self, mean_VA=None, std_VA=None, Embedding_ChemBERT=384):
         super(COSBERT, self).__init__()
         self.mean_VA = mean_VA
         self.std_VA = std_VA
