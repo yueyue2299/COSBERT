@@ -17,10 +17,10 @@ class COSBERT(nn.Module):
         
         self.shared_layers = nn.Sequential(
             nn.Linear(Embedding_ChemBERT, hidden_dim_1),
-            nn.Dropout(p=0.3),
+            nn.Dropout(p=0.5),
             nn.ReLU(),
             nn.Linear(hidden_dim_1, hidden_dim_last),
-            nn.Dropout(p=0.2),
+            nn.Dropout(p=0.4),
             nn.ReLU()
         )
         # V_cosmo and A_cosmo output layer [2]
@@ -50,7 +50,8 @@ class COSBERT(nn.Module):
         
         # sigma profile
         sigma_out = self.sigma_output(shared_out)
-        sigma_out = torch.relu(sigma_out) # prevent negative values
+        # sigma_out = torch.relu(sigma_out) # prevent negative values
+        sigma_out = F.leaky_relu(sigma_out, negative_slope=0.01) # lelu: 0 if x<0, leaky_relu: 0 only if x=0
         sigma_sum = torch.sum(sigma_out, dim=1, keepdim=True) + 1e-8 # prevent sum = 0
         sigma_out = sigma_out / sigma_sum # normalization
         
